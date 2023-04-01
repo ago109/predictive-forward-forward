@@ -1,9 +1,12 @@
 """
+Code for paper "The Predictive Forward-Forward Algorithm" (Ororbia & Mali, 2022)
+
+################################################################################
 Simulates the training/adaptation of a recurrent neural system composed of
 a representation and generative circuit, trained via the preditive forward-forward
-process. Note that this code focuses on datasets of gray-scale images/patterns.
-
-Code for paper "The Predictive Forward-Forward Algorithm" (Ororbia & Mali, 2022)
+process.
+Note that this code focuses on datasets of gray-scale images/patterns.
+################################################################################
 """
 
 import os
@@ -51,6 +54,8 @@ def plot_img_grid(samples, fname, nx, ny, px, py, plt, rotNeg90=False): # rows, 
     plt.clf()
 
 from pff_rnn import PFF_RNN
+
+################################################################################
 
 seed = 69
 tf.random.set_seed(seed=seed)
@@ -230,7 +235,7 @@ with tf.device(gpu_tag):
                 "thr": 10.0,
                 "eps_r": 0.01,
                 "eps_g": 0.025}
-        agent = PFF_RNN(args)
+        agent = PFF_RNN(args=args)
         ## set up optimization
         eta = 0.00025 # 0.0005 # for grnn
         reg_lambda = 0.0

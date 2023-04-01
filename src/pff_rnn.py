@@ -1,3 +1,9 @@
+"""
+Code for paper "The Predictive Forward-Forward Algorithm" (Ororbia & Mali, 2022)
+
+This file contains model constructor and its credit assignment code.
+"""
+
 import os
 import sys
 import copy
@@ -5,10 +11,6 @@ import copy
 import dill as pickle
 import tensorflow as tf
 import numpy as np
-
-"""
-Code for paper "The Predictive Forward-Forward Algorithm" (Ororbia & Mali, 2022)
-"""
 
 ### generic routines/functions
 
@@ -149,6 +151,19 @@ class PFF_RNN:
             self.L1 = tf.Variable(initializer([self.n_units, self.n_units])) # lateral lyr 1
             self.L2 = tf.Variable(initializer([self.n_units, self.n_units])) # lateral lyr 2
             theta_r = [self.L1,self.L2,self.b1,self.b2,self.W1,self.W2,self.V2,self.V,self.W,self.b] ## theta_r
+        else:
+            self.M1 = create_competiion_matrix(self.n_units, n_group=10)
+            self.M2 = create_competiion_matrix(self.n_units, n_group=10)
+            self.L1 = theta_r[0]
+            self.L2 = theta_r[1]
+            self.b1 = theta_r[2]
+            self.b2 = theta_r[3]
+            self.W1 = theta_r[4]
+            self.W2 = theta_r[5]
+            self.V2 = theta_r[6]
+            self.V = theta_r[7]
+            self.W = theta_r[8]
+            self.b = theta_r[9]
         self.theta = theta_r
 
         if theta_g is None: ## generative circuit params
@@ -156,6 +171,10 @@ class PFF_RNN:
             self.G2 = tf.Variable(initializer([self.n_units, self.n_units]))
             self.G1 = tf.Variable(initializer([self.n_units, self.x_dim]))
             theta_g = [self.Gy,self.G1,self.G2] ## theta_g
+        else:
+            self.Gy = theta_g[0]
+            self.G1 = theta_g[1]
+            self.G2 = theta_g[2]
         self.theta_g = theta_g
 
         ## activation functions and latent states/stat variables
@@ -459,13 +478,17 @@ class PFF_RNN:
 
         return [z1,z2], [logit1,logit2]
 
-    def get_latent(self, x, y, K):
+    def get_latent(self, x, y, K, use_y_hat=False):
         self.z1 = None
         self.z0_hat = 0.0
         z_lat = self.forward(x)
+        y_hat = z_lat[len(z_lat)-1]
         self.z_g = tf.Variable(tf.zeros([x.shape[0], self.g_units]))
+        y_ = y
+        if use_y_hat == True:
+            y_ = y_hat
         for k in range(K):
-            self._infer_latent(x,y,z_lat)
+            self._infer_latent(x,y_,z_lat)
         #self.z0_hat = self.ofx(tf.matmul(self.normalize(self.gfx(self.z1)),self.G1))
         #self.z0_hat = self.z0_hat/(K * 1.0)
         return self.z_g + 0
