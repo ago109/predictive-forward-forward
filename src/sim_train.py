@@ -11,8 +11,8 @@ Note that this code focuses on datasets of gray-scale images/patterns.
 
 import os
 import sys, getopt, optparse
-#import pickle
-import dill as pickle
+import pickle
+#import dill as pickle
 sys.path.insert(0, '../')
 import tensorflow as tf
 import numpy as np
@@ -104,19 +104,17 @@ if max_val > 1.0:
     X = X/max_val
 
 Y = ( tf.cast(np.load(yfname, allow_pickle=True),dtype=tf.float32) )
-#Y = Y[0:n_samp,:]
 y_dim = Y.shape[1]
 print("Y.shape = ",Y.shape)
 
-n_iter = 100 #60 # number of training iterations
+n_iter = 60 #100 #60 # number of training iterations
 batch_size = 500 # batch size
 dev_batch_size = 500 # dev batch size
-#dataset = DataLoader(design_matrices=[("x",X.numpy()),("y",Y.numpy()),("x_neg",x_neg.numpy())], batch_size=batch_size)
 dataset = DataLoader(design_matrices=[("x",X.numpy()),("y",Y.numpy())], batch_size=batch_size)
 
 print(" > Loading dev set")
-xfname = "{}/testX.npy".format(data_dir)
-yfname = "{}/testY.npy".format(data_dir)
+xfname = "{}/validX.npy".format(data_dir)
+yfname = "{}/validY.npy".format(data_dir)
 Xdev = ( tf.cast(np.load(xfname, allow_pickle=True),dtype=tf.float32) )
 
 if len(Xdev.shape) > 2:
@@ -166,7 +164,7 @@ def classify(agent, x):
     y_hat = tf.nn.softmax(Ey)
     return y_hat, Ey
 
-def eval(agent, dataset, debug=False):
+def eval(agent, dataset, debug=False, save_img=True, out_dir=""):
     '''
     Evaluates the current state of the agent given a dataset (data-loader).
     '''
@@ -179,7 +177,6 @@ def eval(agent, dataset, debug=False):
     #debug = True
     for batch in dataset:
         _, x = batch[0]
-        #_, y_tag = batch[1]
         _, y = batch[1]
         N += x.shape[0]
         Ny += float(tf.reduce_sum(y))
@@ -199,7 +196,6 @@ def eval(agent, dataset, debug=False):
             print(y_hat[0:4,:])
             print("------------------------")
 
-        #y_m = tf.squeeze(y_m)
         y_ind = tf.cast(tf.argmax(y,1),dtype=tf.int32)
         y_pred = tf.cast(tf.argmax(Ey,1),dtype=tf.int32)
         comp = tf.cast(tf.equal(y_pred,y_ind),dtype=tf.float32) #* y_m
@@ -208,15 +204,15 @@ def eval(agent, dataset, debug=False):
     Acc = Acc/Ny
     Lx = Lx/Ny
 
-    fname = "{}/x_samples.png".format(out_dir)
-    plot_img_grid(x_hat.numpy(), fname, nx=10, ny=10, px=28, py=28, plt=plt)
-    plt.close()
+    if save_img == True:
+        fname = "{}/x_samples.png".format(out_dir)
+        plot_img_grid(x_hat.numpy(), fname, nx=10, ny=10, px=28, py=28, plt=plt)
+        plt.close()
 
-    fname = "{}/x_data.png".format(out_dir)
-    plot_img_grid(x, fname, nx=10, ny=10, px=28, py=28, plt=plt)
-    plt.close()
+        fname = "{}/x_data.png".format(out_dir)
+        plot_img_grid(x, fname, nx=10, ny=10, px=28, py=28, plt=plt)
+        plt.close()
 
-    #sys.exit(0)
     return Ly, Acc, Lx
 
 print("----")
@@ -225,9 +221,13 @@ with tf.device(gpu_tag):
     best_acc_list = []
     acc_list = []
     for tr in range(n_trials):
+        acc_scores = [] # tracks acc during training w/in a trial
         ########################################################################
-        ## create circuit model
+        ## create model
         ########################################################################
+        model_dir = "{}/trial{}/".format(out_dir, tr)
+        if not os.path.exists(model_dir):
+            os.makedirs(model_dir)
         args = {"x_dim": x_dim,
                 "y_dim": y_dim,
                 "n_units": 2000,
@@ -250,7 +250,8 @@ with tf.device(gpu_tag):
         ########################################################################
         ## begin simulation
         ########################################################################
-        Ly, Acc, Lx = eval(agent, devset)
+        Ly, Acc, Lx = eval(agent, devset, out_dir=model_dir)
+        acc_scores.append(Acc)
         print("{}: L {} Acc = {}  Lx {}".format(-1, Ly, Acc, Lx))
 
         best_Acc = Acc
@@ -292,19 +293,20 @@ with tf.device(gpu_tag):
             print()
             print("--------------------------------------")
 
-            Ly, Acc, Lx = eval(agent, devset)
+            Ly, Acc, Lx = eval(agent, devset, out_dir=model_dir)
+            acc_scores.append(Acc)
+            np.save("{}/dev_acc.npy".format(model_dir), np.asarray(acc_scores))
             print("{}: L {} Acc = {}  Lx {}".format(t, Ly, Acc, Lx))
 
             if Acc > best_Acc:
                 best_Acc = Acc
                 best_Ly = Ly
 
-                model_dir = "{}/trial{}/".format(out_dir, tr)
                 print(" >> Saving model to:  ",model_dir)
                 agent.save_model(model_dir)
 
         print("************")
-        Ly, Acc, _ = eval(agent, dataset)
+        Ly, Acc, _ = eval(agent, dataset, out_dir=model_dir, save_img=False)
         print("   Train: Ly {} Acc = {}".format(Ly, Acc))
         print("Best.Dev: Ly {} Acc = {}".format(best_Ly, best_Acc))
 
@@ -319,8 +321,8 @@ with tf.device(gpu_tag):
     print("  Test.Acc = {:.4f} \pm {:.4f}".format(mu, sd))
 
     ## store result to disk just in case...
-    results_fname = "{}/results.txt".format(out_dir)
+    results_fname = "{}/post_train_results.txt".format(out_dir)
     log_t = open(results_fname,"a")
     log_t.write("Generalization Results:\n")
-    log_t.write("  Test.Acc = {:.4f} \pm {:.4f}".format(mu, sd))
+    log_t.write("  Test.Acc = {:.4f} \pm {:.4f}\n".format(mu, sd))
     log_t.close()

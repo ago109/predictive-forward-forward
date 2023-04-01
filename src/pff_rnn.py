@@ -7,8 +7,8 @@ This file contains model constructor and its credit assignment code.
 import os
 import sys
 import copy
-#import pickle
-import dill as pickle
+import pickle
+#import dill as pickle
 import tensorflow as tf
 import numpy as np
 
