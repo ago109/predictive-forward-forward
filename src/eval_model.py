@@ -2,7 +2,7 @@
 Code for paper "The Predictive Forward-Forward Algorithm" (Ororbia & Mali, 2022)
 
 ################################################################################
-Samples a trained PFF-RNN.
+Samples a trained PFF-RNN system.
 ################################################################################
 """
 

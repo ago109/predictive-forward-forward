@@ -97,6 +97,10 @@ dataset = DataLoader(design_matrices=[("x",X.numpy()),("y",Y.numpy())],
                      batch_size=batch_size, disable_shuffle=True)
 
 def calc_latent_map(agent, dataset, debug=False):
+    '''
+    Calculates a latent "map" or matrix containing the latent encoding of
+    a dataset/loader.
+    '''
     z = None
     N = 0.0
     L_r = 0.0
