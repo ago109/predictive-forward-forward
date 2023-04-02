@@ -12,6 +12,13 @@ You will only need following basic packages
 4. Python (version >=3.5)
 5. [Ngc-learn](https://github.com/ago109/ngc-learn) (Some modules responsible for generating images are dependent on ngc-learn)
 
+# Execution
+
+To reproduce results from our paper simply run
+
+1. bash src/run.sh (This will train model for K epochs)
+2. bash src/analyze.sh (This will evaluate model and reproduce plots)
+
 # Citations
 
 Please cite our paper if it is helpful in your work:
