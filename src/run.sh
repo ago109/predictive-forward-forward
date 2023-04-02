@@ -1,6 +1,6 @@
 #!/bin/bash
 GPU_ID=0
-N_TRIALS=2
+N_TRIALS=2 # number of experimental trials to run
 
 echo " >>> Running MNIST simulation!"
 DATA_DIR="../data/mnist/"
