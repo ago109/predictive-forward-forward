@@ -318,11 +318,11 @@ with tf.device(gpu_tag):
     n_dec = 4
     mu = round(np.mean(np.asarray(best_acc_list)), n_dec)
     sd = round(np.std(np.asarray(best_acc_list)), n_dec)
-    print("  Test.Acc = {:.4f} \pm {:.4f}".format(mu, sd))
+    print("  Test.Error = {:.4f} \pm {:.4f}".format(mu, sd))
 
     ## store result to disk just in case...
     results_fname = "{}/post_train_results.txt".format(out_dir)
     log_t = open(results_fname,"a")
     log_t.write("Generalization Results:\n")
-    log_t.write("  Test.Acc = {:.4f} \pm {:.4f}\n".format(mu, sd))
+    log_t.write("  Test.Error = {:.4f} \pm {:.4f}\n".format(mu, sd))
     log_t.close()
