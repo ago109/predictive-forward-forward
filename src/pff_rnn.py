@@ -25,6 +25,7 @@ def deserialize(fname): ## object "loading" routine
     fd.close()
     return object
 
+@tf.function
 def create_competiion_matrix(z_dim, n_group, beta_scale=1.0, alpha_scale=1.0):
     """
     Competition matrix initialization function, adapted from
@@ -54,6 +55,7 @@ def create_competiion_matrix(z_dim, n_group, beta_scale=1.0, alpha_scale=1.0):
     V_l = V_l * (1.0 - diag) * beta_scale + diag * alpha_scale
     return V_l
 
+@tf.function
 def softmax(x, tau=0.0): ## temperature-controlled softmax activation
     if tau > 0.0:
         x = x / tau
@@ -70,7 +72,7 @@ def _relu(x): ## FF/PFF relu variant activation
         dx = tf.ones(x.shape) # pretend like derivatives exist for zero values
         return upstream * dx
     return out, grad
-
+@tf.function
 def clip_fx(x): ## hard-clip activation
     return tf.clip_by_value(x, 0.0, 1.0)
 
