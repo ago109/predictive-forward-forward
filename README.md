@@ -1,4 +1,5 @@
-# The Predictive Forward-Forward Algorithm (Bio-plausible Forward-only Learning Alternative for Training Neural Networks)
+# The Predictive Forward-Forward Algorithm
+## Bio-plausible Forward-Only Learning for Training Neural Networks
 Implementation of the proposed predictive forward-forward (PFF) learning algorithm for training
 a neurobiologically-plausible recurrent neural system. This work combines elements of predictive coding with the recently
 proposed forward-forward algorithm to create a novel online learning process that involves dynamically
