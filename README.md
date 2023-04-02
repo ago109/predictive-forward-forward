@@ -19,6 +19,12 @@ To reproduce results from our paper simply run
 1. bash src/run.sh (This will train model for K epochs)
 2. bash src/analyze.sh (This will evaluate model and reproduce plots)
 
+Model specific parameters can be adjusted in pff_rnn.py
+Training specific parameters are available in sim_train.py
+
+Tips while using this on your own dataset
+1. Track your local losses, accordingly adjust the hyper-parameters for the model
+
 # Citations
 
 Please cite our paper if it is helpful in your work:
