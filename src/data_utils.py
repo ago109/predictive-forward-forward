@@ -1,17 +1,16 @@
 """
-Data functions and utilies.
+Data functions and utilities.
 
 Code for paper "The Predictive Forward-Forward Algorithm" (Ororbia & Mali, 2022)
 """
 import random
-#import tensorflow as tf
 import numpy as np
 import io
 import sys
 import math
 
 seed = 69
-#tf.random.set_seed(seed=seed)
+# set your random seed - very important to reproduce any Machine/Deep learning work
 np.random.seed(seed)
 
 class DataLoader(object):
