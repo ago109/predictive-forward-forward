@@ -163,6 +163,8 @@ def eval(agent, dataset, debug=False):
         y_pred = tf.cast(tf.argmax(Ey,1),dtype=tf.int32)
         comp = tf.cast(tf.equal(y_pred,y_ind),dtype=tf.float32) #* y_m
         Acc += tf.reduce_sum( comp )
+        print("\r Lx = {}  Ly = {}  Acc = {} ({} samples)".format(Lx/Ny,Ly/Ny,Acc/Ny,Ny),end="")
+    print()
     Ly = Ly/Ny
     Acc = Acc/Ny
     Lx = Lx/Ny
