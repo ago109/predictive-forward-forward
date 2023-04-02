@@ -1,11 +1,10 @@
 # <p align="center">The Predictive Forward-Forward Algorithm</p>
 ## <p align="center">Bio-plausible Forward-Only Learning for Training Neural Networks</p>
-Implementation of the proposed predictive forward-forward (PFF) learning algorithm for training
-a neurobiologically-plausible recurrent neural system. This work combines elements of predictive coding with the recently proposed forward-forward algorithm to create a novel online learning process that involves dynamically adapting two neural circuits - a representation circuit and a generative circuit. Notably, the system introduces noise injection into the latent activity updates as well as learnable lateral  synapses that induce competition across neural units (emulating cross-inhibitory and self-excitation
+Implementation of the proposed <a href="https://arxiv.org/abs/2301.01452">predictive forward-forward (PFF) learning algorithm</a> for training a neurobiologically-plausible recurrent neural system. This work combines elements of predictive coding with the recently proposed forward-forward algorithm to create a novel online learning process that involves dynamically adapting two neural circuits - a representation circuit and a generative circuit. Notably, the system introduces noise injection into the latent activity updates as well as learnable lateral  synapses that induce competition across neural units (emulating cross-inhibitory and self-excitation
 effects inherent to neural computation).
 
 # Requirements
-Our implementation is easy to follow and, with knowledge of basic linear algebra, one can decode the inner workings of the PFF algorithm. Please look at Algorithm-1 in our paper to better understand the overall mechanics of the inference and learning processes. In this framework, we have provided simple modules; thus hopefully making it very convenient to extend our framework.
+Our implementation is easy to follow and, with knowledge of basic linear algebra, one can decode the inner workings of the PFF algorithm. Please look at Algorithm 1 in <a href="https://arxiv.org/abs/2301.01452">our paper</a> (in the Appendix) to better understand the overall mechanics of the inference and learning processes. In this framework, we have provided simple modules; thus hopefully making it very convenient to extend our framework.
 
 To run the code, you should only need following basic packages:
 1. TensorFlow (version >= 2.0)
