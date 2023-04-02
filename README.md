@@ -42,7 +42,7 @@ Model-specific hyper-parameter defaults can be set/adjusted in `pff_rnn.py`.
 Training-specific hyper-parameters are available in `sim_train.py` - note that one
 can create/edit an arguments dictionary much like the one depicted below (inside of `sim_train.py`):
 
-<img src="fig/pff_config.png" width="200">
+<img src="fig/pff_config.png" width="300">
 
 which the `PFF_RNN()` constructor takes in as input to construct the simulation of
 the dual-circuit system.
