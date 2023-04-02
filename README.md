@@ -10,7 +10,7 @@ You will only need following basic packages
 2. Numpy
 3. Matplotlib
 4. Python (version >=3.5)
-5. [Ngc-learn][https://github.com/ago109/ngc-learn] (Some modules depends responsible for generating components are dependent on ngc-learn)
+5. [Ngc-learn](https://github.com/ago109/ngc-learn) (Some modules responsible for generating images are dependent on ngc-learn)
 
 # Citations
 
