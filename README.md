@@ -1,11 +1,7 @@
 # <p align="center">The Predictive Forward-Forward Algorithm</p>
 ## <p align="center">Bio-plausible Forward-Only Learning for Training Neural Networks</p>
 Implementation of the proposed predictive forward-forward (PFF) learning algorithm for training
-a neurobiologically-plausible recurrent neural system. This work combines elements of predictive coding with the recently
-proposed forward-forward algorithm to create a novel online learning process that involves dynamically
-adapting two neural circuits - a representation circuit and a generative circuit. Notably,
-the system introduces noise injection into the latent activity updates as well as learnable lateral  
-synapses that induce competition across neural units (emulating cross-inhibitory and self-excitation
+a neurobiologically-plausible recurrent neural system. This work combines elements of predictive coding with the recently proposed forward-forward algorithm to create a novel online learning process that involves dynamically adapting two neural circuits - a representation circuit and a generative circuit. Notably, the system introduces noise injection into the latent activity updates as well as learnable lateral  synapses that induce competition across neural units (emulating cross-inhibitory and self-excitation
 effects inherent to neural computation).
 
 # Requirements
